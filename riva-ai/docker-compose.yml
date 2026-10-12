@@ -1,0 +1,25 @@
+services:
+  riva-ai:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      RIVA_CHAT_MODEL: llama3.2
+      RIVA_EMBED_MODEL: nomic-embed-text
+      OLLAMA_HOST: http://ollama:11434
+      RIVA_DATA_DIR: /app/data
+    volumes:
+      - riva_data:/app/data
+    depends_on:
+      - ollama
+    restart: unless-stopped
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_models:/root/.ollama
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+volumes:
+  riva_data:
+  ollama_models:
